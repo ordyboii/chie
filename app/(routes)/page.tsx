@@ -1,10 +1,18 @@
-import { Button } from "@headlessui/react";
+import Button, { LinkButton } from "@/app/_components/button";
+import { Field, Input, Label } from "@headlessui/react";
 
 export default function Home() {
   return (
-    <>
-      <Button>Hide</Button>
-      <h1>Hi there</h1>
-    </>
+    <div>
+      <Button variant="default">Start now</Button>
+      <Button variant="secondary">Start now</Button>
+      <Button variant="danger">Start now</Button>
+      <LinkButton href="/">Start now</LinkButton>
+      <Button variant="teritary">Start now</Button>
+      <Field className="ji-input-group">
+        <Label className="ji-label">What?</Label>
+        <Input className="ji-input" />
+      </Field>
+    </div>
   );
 }

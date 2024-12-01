@@ -1,4 +1,4 @@
-export function setupVariant<TVariant extends string>(params: {
+export function setupVariants<TVariant extends string>(params: {
   defaultClasses: string;
   variants: Record<TVariant, string>;
 }) {

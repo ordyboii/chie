@@ -4,7 +4,7 @@ import { Field, Input, Label } from "@headlessui/react";
 export default function Home() {
   return (
     <div>
-      <Button variant="default">Start now</Button>
+      <Button variant="primary">Start now</Button>
       <Button variant="secondary">Start now</Button>
       <Button variant="danger">Start now</Button>
       <LinkButton href="/">Start now</LinkButton>

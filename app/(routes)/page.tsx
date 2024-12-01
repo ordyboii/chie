@@ -1,4 +1,4 @@
-import Button, { LinkButton } from "@/app/_components/button";
+import Button, { LinkButton } from "@/app/components/button";
 import { Field, Input, Label } from "@headlessui/react";
 
 export default function Home() {

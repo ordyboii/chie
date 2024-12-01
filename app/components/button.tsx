@@ -9,8 +9,9 @@ const defaultButtonClass =
 type Variant = "default" | "secondary" | "teritary" | "danger";
 
 function getClassFromVariant(variant: Variant) {
-  if (variant === "default") {
-    return;
+  switch (variant) {
+    default:
+      return "";
   }
 }
 

@@ -1,7 +1,6 @@
 import { HTMLAttributes, PropsWithChildren } from "react";
 import Link, { LinkProps } from "next/link";
 import { Button as HeadlessButton } from "@headlessui/react";
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { InferVariants, setupVariants } from "@/app/lib/setup-variants";
 
 const variants = setupVariants({
@@ -24,7 +23,9 @@ export function LinkButton(props: PropsWithChildren<LinkProps>) {
       draggable="false"
       {...props}
     >
-      {props.children} <ChevronRightIcon className="w-5" aria-hidden="true" />
+      {props.children} <svg className="w-6 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"/>
+</svg>
     </Link>
   );
 }

@@ -1,28 +1,29 @@
+import "./button.css";
 import Link, { LinkProps } from "next/link";
 import { HTMLAttributes, PropsWithChildren } from "react";
 
-function setupComponentVariants<T extends Record<string, string>>(params: {
-  defaultClass: string;
-  variants: T;
-}) {
-  const { defaultClass, variants } = params;
-  return function (props: { variant: keyof T; className?: string }) {
-    return `${defaultClass} ${variants[props.variant]} ${props.className}`;
-  };
-}
+// function setupComponentVariants<T extends Record<string, string>>(params: {
+//   defaultClass: string;
+//   variants: T;
+// }) {
+//   const { defaultClass, variants } = params;
+//   return function (props: { variant: keyof T; className?: string }) {
+//     return `${defaultClass} ${variants[props.variant]} ${props.className}`;
+//   };
+// }
 
-type InferVariants<T> = T extends (props: { variant: infer V }) => any
-  ? V
-  : never;
+// type InferVariants<T> = T extends (props: { variant: infer V }) => any
+//   ? V
+//   : never;
 
-const variants = setupComponentVariants({
-  defaultClass: "m-button",
-  variants: {
-    secondary: "m-button--secondary",
-    danger: "m-button--danger",
-    ghost: "m-button--ghost",
-  },
-});
+// const variants = setupComponentVariants({
+//   defaultClass: "m-button",
+//   variants: {
+//     secondary: "m-button--secondary",
+//     danger: "m-button--danger",
+//     ghost: "m-button--ghost",
+//   },
+// });
 
 export default function Button(
   props: PropsWithChildren<

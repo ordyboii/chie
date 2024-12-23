@@ -1,15 +1,9 @@
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import Button from "./components/button";
 
 export default function Home() {
   return (
     <div className="flex">
-      <button className="m-button" data-variant="primary">
-        Hello
-      </button>
-      <a className="m-button">
-        Hello
-        <ChevronRightIcon aria-hidden="true" />
-      </a>
+      <Button variant="secondary">wda</Button>
     </div>
   );
 }

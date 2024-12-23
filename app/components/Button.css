@@ -1,13 +1,23 @@
-.Button {
-  --background: red;
+.button {
+  --background: var(--red-8);
+  --text: var(--gray-1);
+  --padding: var(--size-1) var(--size-3);
 
   background-color: var(--background);
+  color: var(--text);
+  padding: var(--padding);
 
   &:where(:hover, :focus) {
-    background-color: #f0f0f0;
+    --background: var(--yellow-4);
+    --text: var(--gray-12);
   }
-}
 
-.Button:active {
-  transform: scale(99%);
+  &:active {
+    transform: scale(99%);
+  }
+
+  &[data-variant="secondary"] {
+    --background: var(--gray-2);
+    --text: var(--gray-12);
+  }
 }

@@ -9,7 +9,7 @@ const session = await authClient.getSession();
 
 function signUp() {
   return authClient.signUp.email({
-    email: "test@example.com",
+    email: "test@example1.com",
     password: "test123456",
     name: "testuser",
   });

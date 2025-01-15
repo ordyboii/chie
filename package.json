@@ -1,18 +1,17 @@
 {
-  "name": "miroish",
-  "version": "1.0.0",
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "concurrently 'npm run dev -w api'"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
-  "workspaces": [
-    "api",
-    "frontend"
-  ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "concurrently": "^9.1.2"
+  "dependencies": {
+    "nuxt": "^3.15.2",
+    "vue": "latest",
+    "vue-router": "latest"
   }
 }

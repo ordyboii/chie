@@ -1,4 +1,18 @@
 {
-  // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "noUnusedLocals": true,
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "@*": ["./src/*"]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

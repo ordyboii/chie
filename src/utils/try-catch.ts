@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 
-export default async function tryCatch<T>(promise: Promise<T>): Promise<[T | null, any]> {
+export async function tryCatch<T>(promise: Promise<T>): Promise<[T | null, any]> {
   try {
     const data = await promise;
     return [data, null];

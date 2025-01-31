@@ -16,7 +16,7 @@ const [news] = await tryCatch(
 );
 
 // const message = await slack.chat.postMessage({
-//   channel: env.SLACK_CHANNEL_ID,
+//   channel: env.slackChannelId,
 //   text: JSON.stringify(news, null, 2)
 // });
 

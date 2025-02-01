@@ -20,7 +20,6 @@ await slack.chat.postMessage({
 	text: `Phrase for today is ${news[0].title}`,
 });
 
-// TODO: refactor this
 let message: MessageElement;
 while (true) {
 	sleep(3000);
@@ -58,7 +57,6 @@ const connection = {
 	port: 6379,
 };
 
-// TODO: refactor this to run above code
 const queueName = "send-phrase";
 const queue = new Queue(queueName, { connection });
 
@@ -79,8 +77,6 @@ const worker = new Worker(
 	},
 	{ connection },
 );
-
-// TODO: get full article by scraping
 
 // const browser = await chromium.launch();
 // const page = await browser.newPage();

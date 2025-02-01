@@ -52,11 +52,14 @@ await slack.chat.postMessage({
 	text: `The phrase actually says ${output.translation}. You scored ${output.score}/100`,
 });
 
+const connection = {
+	host: "localhost",
+	port: 6379,
+};
+
 // TODO: refactor this to run above code
 const queueName = "send-phrase";
-const queue = new Queue(queueName, {
-	connection: {},
-});
+const queue = new Queue(queueName, { connection });
 
 await queue.upsertJobScheduler(
 	"every-day",
@@ -71,11 +74,9 @@ await queue.upsertJobScheduler(
 const worker = new Worker(
 	queueName,
 	async (job) => {
-		//
+		return "";
 	},
-	{
-		connection: {},
-	},
+	{ connection },
 );
 
 // TODO: get full article by scraping

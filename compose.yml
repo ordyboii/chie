@@ -1,0 +1,14 @@
+services:
+  redis:
+    image: "redis:latest" # Or specify a version like redis:7.0
+    ports:
+      - "6379:6379" # Maps the container's port 6379 to your host's port 6379
+    volumes:
+    - .redis_data:/data # Persists data across container restarts (optional, but recommended)
+    # Optional: Add a password for Redis (highly recommended for production)
+    # environment:
+    #   - REDIS_PASSWORD=your_strong_password
+    # command: ["redis-server", "--requirepass", "$REDIS_PASSWORD"] # Uncomment if using a password
+
+volumes:
+  .redis_data: # Named volume for Redis data persistence

@@ -1,4 +1,3 @@
-import { styleText } from "node:util";
 import { NHK_TOP_NEWS_URL, REPLICATE_MODEL } from "@constants";
 import { NHKNewsSchema } from "@models/nhk-news";
 import type { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
@@ -7,6 +6,7 @@ import { getJBotPrompt, replicate } from "@utils/replicate";
 import { slack } from "@utils/slack";
 import { sleep } from "@utils/sleep";
 import { tryCatch } from "@utils/try-catch";
+import { Queue, Worker } from "bullmq";
 import { z } from "zod";
 
 const [news] = await tryCatch(
@@ -35,9 +35,10 @@ while (true) {
 }
 
 const input = getJBotPrompt({ phrase: news[0].title, input: message.text });
-const prediction = (await replicate.run(REPLICATE_MODEL, {
+const prediction = await replicate.run(REPLICATE_MODEL, {
 	input,
-})) as string[];
+});
+
 const output = z
 	.array(z.string())
 	.transform(
@@ -50,6 +51,32 @@ await slack.chat.postMessage({
 	channel: env.slackChannelId,
 	text: `The phrase actually says ${output.translation}. You scored ${output.score}/100`,
 });
+
+const queueName = "send-phrase";
+
+const queue = new Queue(queueName, {
+	connection: {},
+});
+
+await queue.upsertJobScheduler(
+	"every-day",
+	{ pattern: "0 30 8 * * *" },
+	{
+		name: "every-job",
+		data: {},
+		opts: {},
+	},
+);
+
+const worker = new Worker(
+	queueName,
+	async (job) => {
+		//
+	},
+	{
+		connection: {},
+	},
+);
 
 // TODO: get full article by scraping
 

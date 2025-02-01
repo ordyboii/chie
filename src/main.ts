@@ -1,13 +1,13 @@
-// import { styleText } from "node:util";
-import { writeFile } from "node:fs/promises";
-import { NHK_NEWS_URL, NHK_TOP_NEWS_URL } from "@constants";
+import { styleText } from "node:util";
+import { NHK_TOP_NEWS_URL, REPLICATE_MODEL } from "@constants";
 import { NHKNewsSchema } from "@models/nhk-news";
-// import { slack } from "@utils/slack";
-// import { env } from "@utils/env";
+import type { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
+import { env } from "@utils/env";
+import { getJBotPrompt, replicate } from "@utils/replicate";
+import { slack } from "@utils/slack";
+import { sleep } from "@utils/sleep";
 import { tryCatch } from "@utils/try-catch";
-import { chromium } from "playwright";
-
-// const text = styleText(["underline", "bgGreen", "white"], "Hello world!");
+import { z } from "zod";
 
 const [news] = await tryCatch(
 	fetch(NHK_TOP_NEWS_URL)
@@ -15,23 +15,54 @@ const [news] = await tryCatch(
 		.then((data) => NHKNewsSchema.array().parse(data)),
 );
 
-// const message = await slack.chat.postMessage({
-//   channel: env.slackChannelId,
-//   text: JSON.stringify(news, null, 2)
-// });
+await slack.chat.postMessage({
+	channel: env.slackChannelId,
+	text: `Phrase for today is ${news[0].title}`,
+});
 
-// console.log(message.ok);
+let message: MessageElement;
+while (true) {
+	sleep(3000);
 
-const browser = await chromium.launch();
-const page = await browser.newPage();
+	const history = await slack.conversations.history({
+		channel: env.slackChannelId,
+	});
 
-const url = `${NHK_NEWS_URL}/${news[0].newsId}/${news[0].newsId}.html`;
-await page.goto(url);
-await page.waitForLoadState("domcontentloaded");
+	if (!history.messages[0].bot_id) {
+		message = history.messages[0];
+		break;
+	}
+}
 
-// const links = await page.$$eval('a', anchors => anchors.map(anchor => anchor.textContent.trim()));
-// console.log(links);
-const screenshot = await page.screenshot();
-await writeFile("screenshot.png", screenshot);
+const input = getJBotPrompt({ phrase: news[0].title, input: message.text });
+const prediction = (await replicate.run(REPLICATE_MODEL, {
+	input,
+})) as string[];
+const output = z
+	.array(z.string())
+	.transform(
+		(data) =>
+			JSON.parse(data.join("")) as { translation: string; score: number },
+	)
+	.parse(prediction);
 
-await browser.close();
+await slack.chat.postMessage({
+	channel: env.slackChannelId,
+	text: `The phrase actually says ${output.translation}. You scored ${output.score}/100`,
+});
+
+// TODO: get full article by scraping
+
+// const browser = await chromium.launch();
+// const page = await browser.newPage();
+
+// const url = `${NHK_NEWS_URL}/${news[0].newsId}/${news[0].newsId}.html`;
+// await page.goto(url);
+// await page.waitForLoadState("domcontentloaded");
+
+// // const links = await page.$$eval('a', anchors => anchors.map(anchor => anchor.textContent.trim()));
+// // console.log(links);
+// const screenshot = await page.screenshot();
+// await writeFile("screenshot.png", screenshot);
+
+// await browser.close();

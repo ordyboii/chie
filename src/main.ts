@@ -20,6 +20,7 @@ await slack.chat.postMessage({
 	text: `Phrase for today is ${news[0].title}`,
 });
 
+// TODO: refactor this
 let message: MessageElement;
 while (true) {
 	sleep(3000);

@@ -1,7 +1,8 @@
 {
 	"type": "module",
 	"scripts": {
-		"start": "node --import=tsx src/main.ts",
+		"start": "node --import=tsx src/app.ts",
+		"check": "biome check --write",
 		"prepare": "husky"
 	},
 	"lint-staged": {

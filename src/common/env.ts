@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-export const Env = z
+process.loadEnvFile("./.env");
+
+const Env = z
 	.object({
 		SLACK_API_TOKEN: z.string().min(1),
 		SLACK_CHANNEL_ID: z.string().min(1),
@@ -13,3 +15,11 @@ export const Env = z
 	}));
 
 export type Env = z.infer<typeof Env>;
+
+const { data, error } = Env.safeParse(process.env);
+
+if (error) {
+	throw new Error(JSON.stringify(error.flatten().fieldErrors, null, 2));
+}
+
+export const env = data;

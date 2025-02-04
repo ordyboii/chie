@@ -1,5 +1,6 @@
+import { env } from "@common/env";
+import { WebClient } from "@slack/web-api";
 import Replicate from "replicate";
-import { env } from "./env";
 
 export const replicate = new Replicate({
 	auth: env.replicateApiToken,
@@ -22,4 +23,10 @@ export function getJBotPrompt(args: { phrase: string; input: string }) {
 		presence_penalty: 1.15,
 		log_performance_metrics: false,
 	};
+}
+
+export const slack = new WebClient(env.slackApiToken);
+
+export async function testSlackApi() {
+	return slack.api.test();
 }

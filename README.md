@@ -17,6 +17,6 @@ Slack bot for learning Japanese. Through articles on NHK Web Easy.
 
 ## Todo
 
-- [] refactor folder structure to features/domain/services / entities / utils
+- [] refactor folder structure to features/domain/services / entities / utils and conlĺn̈fig dir
 - [] refactor bullmq queues 
 - [] host on render

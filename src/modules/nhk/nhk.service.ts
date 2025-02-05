@@ -1,6 +1,7 @@
-import { getJBotPrompt, replicate, slack } from "@common/api";
+import { replicate, slack } from "@common/api";
 import { NHK_TOP_NEWS_URL, REPLICATE_MODEL } from "@common/constants";
 import { env } from "@common/env";
+import { translatePhraseAndScore } from "@common/prompts";
 import { sleep } from "@common/utils";
 import { type NHKNews, NHKNewsSchema } from "@modules/nhk/nhk.validation";
 import type { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
@@ -39,7 +40,10 @@ export const NHKService = {
 			}
 		}
 
-		const input = getJBotPrompt({ phrase: news[0].title, input: message.text });
+		const input = translatePhraseAndScore({
+			phrase: news[0].title,
+			input: message.text,
+		});
 		const prediction = await replicate.run(REPLICATE_MODEL, {
 			input,
 		});
@@ -56,5 +60,8 @@ export const NHKService = {
 			channel: env.slackChannelId,
 			text: `The phrase actually says ${output.translation}. You scored ${output.score}/100`,
 		});
+	},
+	async getAndSendArticleToSlack() {
+		// TODO
 	},
 };

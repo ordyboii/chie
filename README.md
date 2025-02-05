@@ -4,19 +4,13 @@ Slack bot for learning Japanese. Through articles on NHK Web Easy.
 
 ## Features
 
-- Japanese to Englieh translations
+- Japanese to English translations
+- Repeatable cron job with bullmq and redis
 
 ## Coming soon
 
-- improvements to bot actions
 - furigana help option for complex kanji 
 - help options to explain certain words ofna phras
 - full article translations
 - English to Japanese translations
 - voice notes
-
-## Todo
-
-- [] refactor folder structure to features/domain/services / entities / utils and conlĺn̈fig dir
-- [] refactor bullmq queues 
-- [] host on render

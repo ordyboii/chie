@@ -5,7 +5,7 @@ import { Queue, Worker } from "bullmq";
 const queueName = "send-phrase-to-slack";
 const queue = new Queue(queueName, { connection: env.redis });
 
-await queue.upsertJobScheduler("every-day", { pattern: "0 14 * * *" });
+await queue.upsertJobScheduler("every-day", { pattern: "0 15 * * *" });
 
 const worker = new Worker(
 	queueName,

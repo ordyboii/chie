@@ -1,6 +1,9 @@
+import { PROD } from "@common/constants";
 import { z } from "zod";
 
-process.loadEnvFile("./.env");
+if (!PROD) {
+	process.loadEnvFile("./.env");
+}
 
 const Env = z
 	.object({

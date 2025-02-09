@@ -7,6 +7,7 @@ import { type NHKNews, NHKNewsSchema } from "@modules/nhk/nhk.validation";
 import type { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
 import { ZodError, z } from "zod";
 
+// test
 export const NHKService = {
 	async getAndSendPhraseToSlack() {
 		let news: NHKNews[];

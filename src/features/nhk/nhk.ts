@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NHKNewsSchema = z
+export const NHKSchema = z
 	.object({
 		top_priority_number: z.number(),
 		news_id: z.string(),
@@ -44,4 +44,4 @@ export const NHKNewsSchema = z
 		newsEasyVoiceUri: data.news_easy_voice_uri,
 	}));
 
-export type NHKNews = z.infer<typeof NHKNewsSchema>;
+export type NHK = z.infer<typeof NHKSchema>;

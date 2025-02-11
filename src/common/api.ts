@@ -1,6 +1,6 @@
-import { env } from "@common/env";
 import { WebClient } from "@slack/web-api";
 import Replicate from "replicate";
+import { env } from "#common/env";
 
 export const replicate = new Replicate({
 	auth: env.replicateApiToken,

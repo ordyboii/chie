@@ -1,7 +1,13 @@
 {
+	"name": "jbot",
+	"version": "1.0.0",
 	"type": "module",
+	"imports": {
+		"#common/*": "./src/common/*.ts",
+		"#features/*": "./src/features/*.ts"
+	},
 	"scripts": {
-		"start": "node --import=tsx src/app.ts",
+		"start": "node --experimental-strip-types src/app.ts",
 		"check": "biome check --write",
 		"prepare": "husky"
 	},
@@ -11,6 +17,7 @@
 	"dependencies": {
 		"@slack/web-api": "^7.8.0",
 		"bullmq": "^5.39.1",
+		"fastify": "^5.2.1",
 		"playwright": "^1.50.1",
 		"replicate": "^1.0.1",
 		"zod": "^3.24.1"
@@ -19,7 +26,6 @@
 		"@biomejs/biome": "^1.9.4",
 		"@types/node": "^22.10.10",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.4.3",
-		"tsx": "^4.19.2"
+		"lint-staged": "^15.4.3"
 	}
 }

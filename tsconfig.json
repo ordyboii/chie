@@ -9,7 +9,8 @@
 		"noUncheckedIndexedAccess": true,
 		"baseUrl": ".",
 		"paths": {
-			"@*": ["./src/*"]
+			"#common/*": ["./src/common/*"],
+			"#features/*": ["src/features/*"]
 		}
 	},
 	"exclude": ["node_modules"]

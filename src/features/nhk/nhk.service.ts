@@ -1,24 +1,32 @@
-import { ZodError, type inferFlattenedErrors, z } from "zod";
+import { z } from "zod";
 import { replicate, slack } from "#common/api";
 import { NHK_TOP_NEWS_URL, REPLICATE_MODEL } from "#common/constants";
 import { env } from "#common/env";
-import { Prompts } from "#common/prompts";
-import { NHKSchema } from "#features/nhk/nhk";
+import { translatePhraseAndScorePrompt } from "#common/prompts";
+import { redis } from "#common/redis";
+import { NHKSchema } from "#features/nhk/nhk.validation";
 
 export const NHKService = {
 	async sendPhraseToSlack() {
-		let data: string;
-		let error: inferFlattenedErrors<typeof NHKSchema> | Error;
+		const res = await fetch(NHK_TOP_NEWS_URL).catch((error) => {
+			throw new Error(`Failed to fetch NHK news: ${error}`);
+		});
+		const json = await res.json().catch((error) => {
+			throw new Error(`NHK news JSON parsing failed: ${error}`);
+		});
+		const news = await NHKSchema.array()
+			.parseAsync(json)
+			.catch((error) => {
+				throw new Error(`Failed to validate NHK news: ${error}`);
+			});
 
-		try {
-			const res = await fetch(NHK_TOP_NEWS_URL);
-			const json = await res.json();
-			const news = NHKSchema.array().parse(json);
-			const phrase = news[0].title;
+		const phrase = news[0].title;
+		const message = `Phrase to translate iS *${phrase}*.`;
 
-			await slack.chat.postMessage({
-				channel: env.slackChannelId,
-				text: `Phrase to translate iS *${phrase}*.`,
+		await slack.client.chat
+			.postMessage({
+				channel: env.SLACK_CHANNEL_ID,
+				text: message,
 				blocks: [
 					{
 						type: "divider",
@@ -35,14 +43,15 @@ export const NHKService = {
 						type: "section",
 						text: {
 							type: "mrkdwn",
-							text: `Phrase to translate iS *${news[0].title}*.`,
+							text: message,
 						},
 					},
 					{
 						type: "input",
+						block_id: "japanese-phrase",
 						element: {
 							type: "plain_text_input",
-							action_id: "plain_text_input-action",
+							action_id: "japanese-phrase-input",
 						},
 						label: {
 							type: "plain_text",
@@ -61,32 +70,31 @@ export const NHKService = {
 									emoji: true,
 								},
 								value: "send",
-								action_id: "send-action",
+								action_id: "japanese-phrase-translate",
 							},
 						],
 					},
 				],
+			})
+			.catch((error) => {
+				throw new Error(`Failed to send message to Slack: ${error}`);
 			});
 
-			data = phrase;
-		} catch (err) {
-			if (err instanceof ZodError) {
-				error = err.flatten();
-			}
-			error = err;
-		}
-
-		return [data, error];
+		redis.set("japanese-phrase", phrase);
 	},
 	async translatePhraseAndSendToSlack(args: { phrase: string; input: string }) {
-		const input = Prompts.translatePhraseAndScore({
+		const input = translatePhraseAndScorePrompt({
 			phrase: args.phrase,
 			input: args.input,
 		});
 
-		const prediction = await replicate.run(REPLICATE_MODEL, {
-			input,
-		});
+		const prediction = await replicate
+			.run(REPLICATE_MODEL, {
+				input,
+			})
+			.catch((error) => {
+				throw new Error(`Failed to get prediction from Replicate: ${error}`);
+			});
 
 		const output = z
 			.array(z.string())
@@ -96,9 +104,34 @@ export const NHKService = {
 			)
 			.parse(prediction);
 
-		await slack.chat.postMessage({
-			channel: env.slackChannelId,
-			text: `The phrase actually says ${output.translation}. You scored ${output.score}/100`,
-		});
+		const message = `The phrase actually says *${output.translation}*. You scored *${output.score}/100*`;
+		await slack.client.chat
+			.postMessage({
+				channel: env.SLACK_CHANNEL_ID,
+				text: message,
+				blocks: [
+					{
+						type: "divider",
+					},
+					{
+						type: "header",
+						text: {
+							type: "plain_text",
+							text: "Your results",
+							emoji: true,
+						},
+					},
+					{
+						type: "section",
+						text: {
+							type: "mrkdwn",
+							text: message,
+						},
+					},
+				],
+			})
+			.catch((error) => {
+				throw new Error(`Failed to send message to Slack: ${error}`);
+			});
 	},
 };

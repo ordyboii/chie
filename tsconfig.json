@@ -1,17 +1,17 @@
 {
-	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"verbatimModuleSyntax": true,
-		"noUnusedLocals": true,
-		"noUncheckedIndexedAccess": true,
-		"baseUrl": ".",
-		"paths": {
-			"#common/*": ["./src/common/*"],
-			"#features/*": ["src/features/*"]
-		}
-	},
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "noUnusedLocals": true,
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "#common/*": ["./src/common/*"],
+      "#features/*": ["src/features/*"]
+    }
+  },
+  "exclude": ["node_modules"]
 }

@@ -1,31 +1,39 @@
 {
-	"name": "jbot",
-	"version": "1.0.0",
-	"type": "module",
-	"imports": {
-		"#common/*": "./src/common/*.ts",
-		"#features/*": "./src/features/*.ts"
-	},
-	"scripts": {
-		"start": "node --experimental-strip-types src/app.ts",
-		"check": "biome check --write",
-		"prepare": "husky"
-	},
-	"lint-staged": {
-		"*": ["biome check --write --no-errors-on-unmatched"]
-	},
-	"dependencies": {
-		"@slack/bolt": "^4.2.0",
-		"bullmq": "^5.39.1",
-		"ioredis": "^5.5.0",
-		"playwright": "^1.50.1",
-		"replicate": "^1.0.1",
-		"zod": "^3.24.1"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
-		"@types/node": "^22.10.10",
-		"husky": "^9.1.7",
-		"lint-staged": "^15.4.3"
-	}
+  "name": "jbot",
+  "version": "1.0.0",
+  "type": "module",
+  "imports": {
+    "#common/*": "./src/common/*.ts",
+    "#features/*": "./src/features/*.ts"
+  },
+  "scripts": {
+    "start": "node --experimental-strip-types src/app.ts",
+    "format": "prettier . --write",
+    "lint": "eslint . --ext .ts",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*": [
+      "npm run format",
+      "npm run lint"
+    ]
+  },
+  "dependencies": {
+    "@slack/bolt": "^4.2.0",
+    "bullmq": "^5.39.1",
+    "ioredis": "^5.5.0",
+    "playwright": "^1.50.1",
+    "replicate": "^1.0.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/node": "^22.10.10",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.2",
+    "typescript-eslint": "^8.24.1"
+  }
 }

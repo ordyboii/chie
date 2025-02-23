@@ -4,7 +4,7 @@ services:
     ports:
       - "6379:6379" # Maps the container's port 6379 to your host's port 6379
     volumes:
-    - .redis_data:/data # Persists data across container restarts (optional, but recommended)
+      - .redis_data:/data # Persists data across container restarts (optional, but recommended)
     # Optional: Add a password for Redis (highly recommended for production)
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}

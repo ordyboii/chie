@@ -10,13 +10,13 @@ Slack bot for learning Japanese. Through articles on NHK Web Easy.
 ## Coming soon
 
 - Slack API improvements with blocks, actions and questions
-- furigana help option for complex kanji 
+- furigana help option for complex kanji
 - help options to explain certain words of a phrase
 - text-to-speech for phrases
 - voice notes
 - full article translations
 
-## Future 
+## Future
 
 - moving to a language-agnostic bot, more than nhk
 - any language

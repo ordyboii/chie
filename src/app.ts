@@ -6,8 +6,8 @@ import { NHKService } from "#features/nhk/nhk.service";
 const queueName = "send-phrase-to-slack";
 const queue = new Queue(queueName, { connection });
 
-// await queue.upsertJobScheduler("every-day", { pattern: "0 17 * * *" });
-await queue.upsertJobScheduler("every-day", { every: 1000000 });
+await queue.upsertJobScheduler("every-day", { pattern: "0 17 * * *" });
+// await queue.upsertJobScheduler("every-day", { every: 1000000 });
 
 const worker = new Worker(
 	queueName,

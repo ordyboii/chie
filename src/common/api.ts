@@ -1,6 +1,6 @@
 import bolt from "@slack/bolt";
 import Replicate from "replicate";
-import { env } from "#common/env";
+import { env } from "@common/env";
 
 const { App } = bolt;
 

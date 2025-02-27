@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { env } from "#common/env";
+import { env } from "@common/env";
 
 export const connection = {
   host: env.REDIS_HOST,

@@ -1,7 +1,7 @@
 import { Queue, Worker } from "bullmq";
-import { slack } from "#common/api";
-import { connection, redis } from "#common/redis";
-import { NHKService } from "#features/nhk/nhk.service";
+import { slack } from "@common/api";
+import { connection, redis } from "@common/redis";
+import * as NHK from "@features/nhk/service";
 
 const queueName = "send-phrase-to-slack";
 const queue = new Queue(queueName, { connection });
@@ -15,7 +15,7 @@ const worker = new Worker(
     console.log(`Job started ${job.name}`);
     job.updateProgress(10);
 
-    await NHKService.sendPhraseToSlack();
+    await NHK.sendPhraseToSlack();
 
     job.updateProgress(100);
     console.log(`Job ended ${job.name} ${job.id}`);
@@ -29,7 +29,7 @@ slack.action("japanese-phrase-translate", async (data) => {
     data.body.state.values["japanese-phrase"]["japanese-phrase-input"].value;
 
   const phrase = await redis.get("japanese-phrase");
-  await NHKService.translatePhraseAndSendToSlack({ phrase, input });
+  await NHK.translatePhraseAndSendToSlack({ phrase, input });
 });
 
 console.log(`Worker started ${worker.name}`);

@@ -2,27 +2,26 @@ export function translatePhraseAndScorePrompt(args: {
   phrase: string;
   input: string;
 }) {
-  const commonPrompt = `
-		You are a system responsible for outputting JSON and JSON only. 
-		Your job is to take a JSON input like this {phrase: string, input: string}. 
-		The phrase will be a Japanese string and the input will be what the user thought that phrase translates to. 
-		You must first translate the phrase from English to Japanese and then compare the user phrase with the English version of the translated Japanese phrase and give a similarity score as a number percentage (no floats). 
-		Once done return a JSON response with the following output {translation: string, score: number}. 
-		DO NOT OUTPUT ANYTHING ELSE BUT THIS JSON.
-	`;
   return {
     top_k: 0,
-    top_p: 0.9,
-    prompt: `${commonPrompt}\n\nUse the following JSON input {phrase: "${args.phrase}", input: "${args.input}"}`,
+    top_p: 0.95,
+    prompt: `Translate "${args.phrase}" to English and work out the similarity score as a whole number 
+    out of 100 between your translation and "${args.input}" which is what the user input. 
+    Output them in JSON format as follows:\n
+    {\n  
+      "translation": string,\n
+      "score": number\n
+    }\n
+    DO NOT OUTPUT ANYTHING ELSE BUT THE JSON.`,
     max_tokens: 512,
-    min_tokens: 0,
-    temperature: 0.6,
-    system_prompt: commonPrompt,
+    temperature: 0.75,
+    system_prompt: "You are a bot responsible for outputting JSON.",
     length_penalty: 1,
+    max_new_tokens: 512,
     stop_sequences: "<|end_of_text|>,<|eot_id|>",
     prompt_template:
-      "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a helpful assistant<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
-    presence_penalty: 1.15,
+      "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+    presence_penalty: 0,
     log_performance_metrics: false,
   };
 }

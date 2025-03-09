@@ -1,14 +1,13 @@
 services:
   redis:
-    image: "redis:latest" # Or specify a version like redis:7.0
+    image: redis:7
+    command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory-policy noeviction
     ports:
-      - "6379:6379" # Maps the container's port 6379 to your host's port 6379
+      - 6379:6379
     volumes:
-      - .redis_data:/data # Persists data across container restarts (optional, but recommended)
-    # Optional: Add a password for Redis (highly recommended for production)
+      - ./redis-data:/data
     environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-    command: ["redis-server", "--requirepass", "$REDIS_PASSWORD"] # Uncomment if using a password
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
 
 volumes:
-  .redis_data: # Named volume for Redis data persistence
+  redis-data:

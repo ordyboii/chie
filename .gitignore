@@ -1,5 +1,4 @@
 node_modules
+redis_data
 .DS_Store
 .env
-.temp
-redis-data

@@ -1,7 +1,7 @@
-import Redis from "ioredis";
+import Redis, { type RedisOptions } from "ioredis";
 import { env } from "@common/env";
 
-export const connection = {
+export const connection: RedisOptions = {
   host: env.REDIS_HOST,
   port: env.REDIS_PORT,
   password: env.REDIS_PASSWORD,

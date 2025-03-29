@@ -1,10 +1,10 @@
 import { schedule } from "node-cron";
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 import { sendPhraseToBot, translateAndSendToBot } from "@nhk/service";
 import { bot } from "@utils";
 
 schedule("* * * * *", async () => {
-  console.log("Job started");
+  console.log("⚡️Job started");
   await sendPhraseToBot();
 });
 
@@ -13,7 +13,7 @@ bot.action("japanese-phrase-translate", async (data) => {
   const input =
     data.body.state.values["japanese-phrase"]["japanese-phrase-input"].value;
 
-  const phrase = await readFile(".cache/japanese-phrase.txt", {
+  const phrase = await readFile(".cache", {
     encoding: "utf8",
   });
 

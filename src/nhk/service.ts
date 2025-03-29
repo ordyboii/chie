@@ -1,9 +1,7 @@
-import { z } from "zod";
-import { writeFile } from "fs/promises";
-import { replicate, slack } from "@api";
-import { NHK_TOP_NEWS_URL, REPLICATE_MODEL } from "@constants";
+import { writeFile } from "node:fs/promises";
+import { bot, similarText, tClient } from "@utils";
+import { NHK_TOP_NEWS_URL } from "@constants";
 import { env } from "@env";
-import { translatePhraseAndScorePrompt } from "@prompts";
 import { NHKSchema } from "@nhk/validation";
 
 export async function sendPhraseToBot() {
@@ -11,7 +9,7 @@ export async function sendPhraseToBot() {
     throw new Error(`Failed to fetch NHK news: ${error}`);
   });
   const json = await res.json().catch((error) => {
-    throw new Error(`NHK news JSON parsing failed: ${error}`);
+    throw new Error(`Failed to parse JSON: ${error}`);
   });
   const news = await NHKSchema.array()
     .parseAsync(json)
@@ -22,7 +20,11 @@ export async function sendPhraseToBot() {
   const phrase = news[0].title;
   const message = `Phrase to translate is *${phrase}*.`;
 
-  await slack.client.chat
+  await writeFile(".cache", phrase).catch((error) => {
+    throw new Error(`Failed to write to cache: ${error}`);
+  });
+
+  await bot.client.chat
     .postMessage({
       channel: env.SLACK_CHANNEL_ID,
       text: message,
@@ -78,36 +80,23 @@ export async function sendPhraseToBot() {
     .catch((error) => {
       throw new Error(`Failed to send message to Slack: ${error}`);
     });
-
-  await writeFile(".cache/japanese-phrase", phrase);
 }
-export async function translateAndSendToBot(args: {
+
+type TranslateAndSendToBotArgs = {
   phrase: string;
   input: string;
-}) {
-  const input = translatePhraseAndScorePrompt({
-    phrase: args.phrase,
-    input: args.input,
+};
+
+export async function translateAndSendToBot(args: TranslateAndSendToBotArgs) {
+  const [translation] = await tClient.translate(args.phrase, {
+    from: "ja",
+    to: "en-GB",
   });
 
-  const prediction = await replicate
-    .run(REPLICATE_MODEL, {
-      input,
-    })
-    .catch((error) => {
-      throw new Error(`Failed to get prediction from Replicate: ${error}`);
-    });
+  const similarity = similarText(args.input, translation);
 
-  const output = z
-    .array(z.string())
-    .transform(
-      (data) =>
-        JSON.parse(data.join("")) as { translation: string; score: number },
-    )
-    .parse(prediction);
-
-  const message = `The phrase actually says *${output.translation}*. You scored *${output.score}/100*`;
-  await slack.client.chat
+  const message = `Translated *${translation}*. You scored *${similarity}/100*`;
+  await bot.client.chat
     .postMessage({
       channel: env.SLACK_CHANNEL_ID,
       text: message,

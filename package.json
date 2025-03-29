@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "start": "tsx ./src/app",
-    "dev": "tsx watch ./src/app",
+    "start": "node --import tsx ./src/app",
     "format": "prettier . --write",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "test": "node --import tsx --test ./tests/**/*.ts"
   },
   "dependencies": {
+    "@google-cloud/translate": "^9.0.1",
     "@slack/bolt": "^4.2.0",
     "node-cron": "^3.0.3",
-    "replicate": "^1.0.1",
     "tsx": "^4.19.3",
     "zod": "^3.24.1"
   },

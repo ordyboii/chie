@@ -5,12 +5,18 @@ if (!PROD) {
   process.loadEnvFile("./.env");
 }
 
-const Env = z.object({
+export const Env = z.object({
   SLACK_BOT_TOKEN: z.string().min(1),
   SLACK_APP_TOKEN: z.string().min(1),
   SLACK_SIGNING_SECRET: z.string().min(1),
   SLACK_CHANNEL_ID: z.string().min(1),
-  REPLICATE_API_TOKEN: z.string().min(1),
+  GOOGLE_API_TYPE: z.string().min(1),
+  GOOGLE_API_PROJECT_ID: z.string().min(1),
+  GOOGLE_API_PRIVATE_KEY_ID: z.string().min(1),
+  GOOGLE_API_PRIVATE_KEY: z.string().min(1),
+  GOOGLE_API_CLIENT_EMAIL: z.string().min(1),
+  GOOGLE_API_CLIENT_ID: z.string().min(1),
+  GOOGLE_API_UNIVERSE_DOMAIN: z.string().min(1),
 });
 
 export type Env = z.infer<typeof Env>;

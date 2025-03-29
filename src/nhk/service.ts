@@ -6,7 +6,7 @@ import { env } from "@env";
 import { translatePhraseAndScorePrompt } from "@prompts";
 import { NHKSchema } from "@nhk/validation";
 
-export async function sendPhraseToSlack() {
+export async function sendPhraseToBot() {
   const res = await fetch(NHK_TOP_NEWS_URL).catch((error) => {
     throw new Error(`Failed to fetch NHK news: ${error}`);
   });
@@ -81,7 +81,7 @@ export async function sendPhraseToSlack() {
 
   await writeFile(".cache/japanese-phrase", phrase);
 }
-export async function translatePhraseAndSendToSlack(args: {
+export async function translateAndSendToBot(args: {
   phrase: string;
   input: string;
 }) {

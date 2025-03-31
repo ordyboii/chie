@@ -5,20 +5,25 @@ if (!PROD) {
   process.loadEnvFile("./.env");
 }
 
-export const Env = z.object({
-  SLACK_BOT_TOKEN: z.string().min(1),
-  SLACK_APP_TOKEN: z.string().min(1),
-  SLACK_SIGNING_SECRET: z.string().min(1),
-  SLACK_CHANNEL_ID: z.string().min(1),
-  SLACK_TESTING_CHANNEL_ID: z.string().optional(),
-  GOOGLE_API_TYPE: z.string().min(1),
-  GOOGLE_API_PROJECT_ID: z.string().min(1),
-  GOOGLE_API_PRIVATE_KEY_ID: z.string().min(1),
-  GOOGLE_API_PRIVATE_KEY: z.string().min(1),
-  GOOGLE_API_CLIENT_EMAIL: z.string().min(1),
-  GOOGLE_API_CLIENT_ID: z.string().min(1),
-  GOOGLE_API_UNIVERSE_DOMAIN: z.string().min(1),
-});
+export const Env = z
+  .object({
+    SLACK_BOT_TOKEN: z.string().min(1),
+    SLACK_APP_TOKEN: z.string().min(1),
+    SLACK_SIGNING_SECRET: z.string().min(1),
+    SLACK_CHANNEL_ID: z.string().min(1),
+    SLACK_TESTING_CHANNEL_ID: z.string().optional(),
+    GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1),
+  })
+  .transform((env) =>
+    Object.assign(env, {
+      GOOGLE_APPLICATION_CREDENTIALS: JSON.parse(
+        Buffer.from(
+          env.GOOGLE_APPLICATION_CREDENTIALS_BASE64,
+          "base64",
+        ).toString("utf-8"),
+      ),
+    }),
+  );
 
 export type Env = z.infer<typeof Env>;
 

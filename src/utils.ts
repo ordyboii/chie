@@ -49,10 +49,6 @@ export function similarText(str1: string, str2: string) {
   return Math.round((1 - distance / maxLength) * 100);
 }
 
-export function replaceEscapedNewLines(str: string) {
-  return str.replace(/\\n/g, "\n");
-}
-
 export function translatePhraseAndScorePrompt(args: {
   phrase: string;
   input: string;

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "start": "node --import tsx ./src/bot.ts",
+    "start": "node --import tsx ./src",
     "format": "prettier . --write",
     "lint": "eslint . --ext .ts",
     "test": "node --import tsx --test ./tests/**/*.ts"

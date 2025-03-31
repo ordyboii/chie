@@ -1,10 +1,9 @@
 import { writeFile } from "node:fs/promises";
 import { bot, similarText, tClient } from "@utils";
-import { NHK_TOP_NEWS_URL } from "@constants";
-import { env } from "@env";
+import { cache, NHK_TOP_NEWS_URL } from "@constants";
 import { NHKSchema } from "@nhk/validation";
 
-export async function sendPhraseToBot() {
+export async function getNHKPhrase() {
   const res = await fetch(NHK_TOP_NEWS_URL).catch((error) => {
     throw new Error(`Failed to fetch NHK news: ${error}`);
   });
@@ -17,16 +16,20 @@ export async function sendPhraseToBot() {
       throw new Error(`Failed to validate NHK news: ${error}`);
     });
 
-  const phrase = news[0].title;
+  return news[0].title;
+}
+
+export async function sendPhraseToBot(channelId: string) {
+  const phrase = await getNHKPhrase();
   const message = `Phrase to translate is *${phrase}*.`;
 
-  await writeFile(".cache", phrase).catch((error) => {
+  await writeFile(cache, phrase).catch((error) => {
     throw new Error(`Failed to write to cache: ${error}`);
   });
 
-  await bot.client.chat
+  const response = await bot.client.chat
     .postMessage({
-      channel: env.SLACK_CHANNEL_ID,
+      channel: channelId,
       text: message,
       blocks: [
         {
@@ -80,11 +83,14 @@ export async function sendPhraseToBot() {
     .catch((error) => {
       throw new Error(`Failed to send message to Slack: ${error}`);
     });
+
+  return response;
 }
 
 type TranslateAndSendToBotArgs = {
   phrase: string;
   input: string;
+  channelId: string;
 };
 
 export async function translateAndSendToBot(args: TranslateAndSendToBotArgs) {
@@ -94,11 +100,11 @@ export async function translateAndSendToBot(args: TranslateAndSendToBotArgs) {
   });
 
   const similarity = similarText(args.input, translation);
-
   const message = `Translated *${translation}*. You scored *${similarity}/100*`;
-  await bot.client.chat
+
+  const response = await bot.client.chat
     .postMessage({
-      channel: env.SLACK_CHANNEL_ID,
+      channel: args.channelId,
       text: message,
       blocks: [
         {
@@ -124,4 +130,6 @@ export async function translateAndSendToBot(args: TranslateAndSendToBotArgs) {
     .catch((error) => {
       throw new Error(`Failed to send message to Slack: ${error}`);
     });
+
+  return response;
 }

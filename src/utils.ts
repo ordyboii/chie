@@ -45,7 +45,8 @@ export function similarText(str1: string, str2: string) {
     return 100; // If both strings are empty, they're 100% similar
   }
 
-  return (1 - distance / maxLength) * 100;
+  // Round to nearest whole number
+  return Math.round((1 - distance / maxLength) * 100);
 }
 
 export function replaceEscapedNewLines(str: string) {

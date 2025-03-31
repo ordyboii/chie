@@ -10,6 +10,7 @@ export const Env = z.object({
   SLACK_APP_TOKEN: z.string().min(1),
   SLACK_SIGNING_SECRET: z.string().min(1),
   SLACK_CHANNEL_ID: z.string().min(1),
+  SLACK_TESTING_CHANNEL_ID: z.string().optional(),
   GOOGLE_API_TYPE: z.string().min(1),
   GOOGLE_API_PROJECT_ID: z.string().min(1),
   GOOGLE_API_PRIVATE_KEY_ID: z.string().min(1),

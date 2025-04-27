@@ -7,9 +7,7 @@ if (!PROD) {
 
 export const Env = z
   .object({
-    SLACK_BOT_TOKEN: z.string().min(1),
-    SLACK_APP_TOKEN: z.string().min(1),
-    SLACK_SIGNING_SECRET: z.string().min(1),
+    SLACK_TOKEN: z.string().min(1),
     SLACK_CHANNEL_ID: z.string().min(1),
     SLACK_TESTING_CHANNEL_ID: z.string().optional(),
     GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1),
@@ -33,4 +31,4 @@ if (error) {
   throw new Error(JSON.stringify(error.flatten().fieldErrors, null, 2));
 }
 
-export const env = data;
+export default data;

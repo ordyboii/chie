@@ -48,7 +48,7 @@ app.after(() => {
       },
     },
     (_, res) => {
-      res.send("ok");
+      res.send(2);
     },
   );
 });

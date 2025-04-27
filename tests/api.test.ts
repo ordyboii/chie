@@ -1,8 +1,11 @@
 import { describe, it } from "node:test";
 import { ok, doesNotThrow } from "node:assert";
-import { bot, similarText, tClient } from "@utils";
-import { env } from "@env";
+import { createChatBot, createTranslateClient, similarText } from "@/utils";
+import env from "@/env";
 import { z } from "zod";
+
+const bot = createChatBot();
+const tClient = createTranslateClient();
 
 describe("test bot", () => {
   it("should have a testing channel", () => {
@@ -10,12 +13,12 @@ describe("test bot", () => {
   });
 
   it("should connect", async () => {
-    const test = await bot.client.auth.test();
+    const test = await bot.auth.test();
     ok(test.ok);
   });
 
   it("can send a message in a channel", async () => {
-    const message = await bot.client.chat.postMessage({
+    const message = await bot.chat.postMessage({
       channel: env.SLACK_TESTING_CHANNEL_ID,
       text: "Hello from testing!",
     });

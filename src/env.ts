@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PROD } from "@constants";
+import { PROD } from "@/constants";
 
 if (!PROD) {
   process.loadEnvFile("./.env");

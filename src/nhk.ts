@@ -1,7 +1,32 @@
-import { writeFile } from "node:fs/promises";
-import { bot, similarText, tClient } from "@utils";
-import { cache, NHK_TOP_NEWS_URL } from "@constants";
-import { NHKSchema } from "@nhk/validation";
+import { promises as fs } from "node:fs";
+import { z } from "zod";
+import { NHK_TOP_NEWS_URL } from "@/constants";
+import { createChatBot, createTranslateClient, similarText } from "@/utils";
+
+const bot = createChatBot();
+const tClient = createTranslateClient();
+
+const NHKSchema = z.object({
+  top_priority_number: z.number(),
+  news_id: z.string(),
+  top_display_flag: z.boolean(),
+  news_prearranged_time: z.string(),
+  title: z.string(),
+  title_with_ruby: z.string(),
+  outline_with_ruby: z.string(),
+  news_file_ver: z.boolean(),
+  news_publication_status: z.boolean(),
+  has_news_web_image: z.boolean(),
+  has_news_web_movie: z.boolean(),
+  has_news_easy_image: z.boolean(),
+  has_news_easy_movie: z.boolean(),
+  has_news_easy_voice: z.boolean(),
+  news_web_image_uri: z.string().optional(),
+  news_web_movie_uri: z.string().optional(),
+  news_easy_image_uri: z.string().optional(),
+  news_easy_movie_uri: z.string().optional(),
+  news_easy_voice_uri: z.string().optional(),
+});
 
 export async function getNHKPhrase() {
   const res = await fetch(NHK_TOP_NEWS_URL).catch((error) => {
@@ -23,11 +48,11 @@ export async function sendPhraseToBot(channelId: string) {
   const phrase = await getNHKPhrase();
   const message = `Phrase to translate is *${phrase}*.`;
 
-  await writeFile(cache, phrase).catch((error) => {
+  await fs.writeFile("", phrase).catch((error) => {
     throw new Error(`Failed to write to cache: ${error}`);
   });
 
-  const response = await bot.client.chat
+  const response = await bot.chat
     .postMessage({
       channel: channelId,
       text: message,
@@ -102,7 +127,7 @@ export async function translateAndSendToBot(args: TranslateAndSendToBotArgs) {
   const similarity = similarText(args.input, translation);
   const message = `Translated *${translation}*. You scored *${similarity}/100*`;
 
-  const response = await bot.client.chat
+  const response = await bot.chat
     .postMessage({
       channel: args.channelId,
       text: message,

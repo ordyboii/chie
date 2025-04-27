@@ -1,32 +1,38 @@
-import { schedule } from "node-cron";
-import { readFile } from "node:fs/promises";
-import * as NHK from "@nhk/service";
-import { bot } from "@utils";
-import { env } from "@env";
-import { cache } from "@constants";
+import fastify from "fastify";
+import fastifyCors from "@fastify/cors";
+import fastifySwagger from "@fastify/swagger";
+import fastifyRateLimit from "@fastify/rate-limit";
+import fastifyApiReference from "@scalar/fastify-api-reference";
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
+import "@/env";
+import routes from "@/routes";
 
-schedule("0 17 * * *", async () => {
-  console.log("⚡️Job started");
-  await NHK.sendPhraseToBot(env.SLACK_CHANNEL_ID);
+const app = fastify({ logger: true });
+
+app.setSerializerCompiler(serializerCompiler);
+app.setValidatorCompiler(validatorCompiler);
+
+await app.register(fastifyCors);
+await app.register(fastifyRateLimit);
+await app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "JBot",
+      description: "Japanese language bot",
+      version: "1.0.0",
+    },
+  },
+  transform: jsonSchemaTransform,
+});
+await app.register(fastifyApiReference, {
+  routePrefix: "/docs",
 });
 
-bot.action("japanese-phrase-translate", async (data) => {
-  await data.ack();
-  const input =
-    data.body.state.values["japanese-phrase"]["japanese-phrase-input"].value;
+await app.register(routes);
 
-  const phrase = await readFile(cache, {
-    encoding: "utf8",
-  }).catch((error) => {
-    throw new Error(`Failed to read from cache: ${error}`);
-  });
-
-  await NHK.translateAndSendToBot({
-    channelId: env.SLACK_CHANNEL_ID,
-    phrase,
-    input,
-  });
-});
-
-await bot.start();
-bot.logger.info("⚡️ Bolt app is running!");
+await app.ready();
+await app.listen({ port: 4000 });

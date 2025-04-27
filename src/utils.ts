@@ -1,6 +1,6 @@
 import { WebClient } from "@slack/web-api";
 import { v2 } from "@google-cloud/translate";
-import env from "@env";
+import env from "@/env";
 
 export function createTranslateClient() {
   return new v2.Translate({
@@ -8,7 +8,7 @@ export function createTranslateClient() {
   });
 }
 
-export function createBot() {
+export function createChatBot() {
   return new WebClient(env.SLACK_TOKEN);
 }
 

@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { ok, doesNotThrow } from "node:assert";
-import * as NHK from "@nhk/service";
-import { env } from "@env";
+import * as NHK from "@/nhk";
+import env from "@/env";
 import { z } from "zod";
 
 describe("test NHK service", () => {

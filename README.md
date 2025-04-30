@@ -1,6 +1,6 @@
 # Jbot or Japanese bot
 
-Chat app for learning Japanese. Through articles on NHK Web Easy.
+Chat app for learning Japanese. Uses articles on NHK Web Easy.
 
 ## Features
 

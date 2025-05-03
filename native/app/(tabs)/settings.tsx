@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 export default function Tab() {
   return (
     <View style={styles.container}>
-      <Text>Tab stis</Text>
+      <Text>Tab wda</Text>
       <Feather name="zoom-out" size={24} color="blue" />
     </View>
   );

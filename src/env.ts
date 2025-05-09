@@ -5,12 +5,13 @@ if (!PROD) {
   process.loadEnvFile("./.env");
 }
 
+// Temporary
 export const Env = z
   .object({
-    SLACK_TOKEN: z.string().min(1),
-    SLACK_CHANNEL_ID: z.string().min(1),
+    SLACK_TOKEN: z.string().min(1).optional(),
+    SLACK_CHANNEL_ID: z.string().min(1).optional(),
     SLACK_TESTING_CHANNEL_ID: z.string().optional(),
-    GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1),
+    GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1).optional(),
   })
   .transform((env) =>
     Object.assign(env, {

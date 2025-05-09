@@ -10,6 +10,7 @@ import {
 } from "fastify-type-provider-zod";
 import "@/env";
 import routes from "@/routes";
+import { PROD } from "@/constants";
 
 const app = fastify({ logger: true });
 
@@ -23,7 +24,6 @@ await app.register(fastifySwagger, {
     info: {
       title: "JBot",
       description: "Japanese language bot",
-      version: "1.0.0",
     },
   },
   transform: jsonSchemaTransform,
@@ -35,4 +35,4 @@ await app.register(fastifyApiReference, {
 await app.register(routes);
 
 await app.ready();
-await app.listen({ port: 4000 });
+await app.listen({ port: PROD ? 8080 : 3000 });

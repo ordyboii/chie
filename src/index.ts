@@ -35,4 +35,4 @@ await app.register(fastifyApiReference, {
 await app.register(routes);
 
 await app.ready();
-await app.listen({ port: PROD ? 8080 : 3000 });
+await app.listen({ port: 8080, host: "0.0.0.0" });

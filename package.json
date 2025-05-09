@@ -7,10 +7,12 @@
     "dev": "tsx watch src",
     "format": "prettier . --write",
     "lint": "eslint . --ext .ts",
-    "test": "node --import tsx --test ./tests/**/*.ts"
+    "test": "node --import tsx --test ./tests/**/*.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@fastify/cors": "^11.0.1",
+    "@fastify/oauth2": "^8.1.2",
     "@fastify/rate-limit": "^10.2.2",
     "@fastify/swagger": "^9.5.0",
     "@google-cloud/translate": "^9.0.1",
@@ -24,10 +26,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "@flydotio/dockerfile": "^0.7.10",
     "@types/node": "^22.13.14",
     "eslint": "^9.21.0",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "prettier": "^3.5.2",
     "typescript-eslint": "^8.24.1"
   }

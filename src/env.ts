@@ -6,23 +6,12 @@ if (!PROD) {
 }
 
 // Temporary
-export const Env = z
-  .object({
-    SLACK_TOKEN: z.string().min(1).optional(),
-    SLACK_CHANNEL_ID: z.string().min(1).optional(),
-    SLACK_TESTING_CHANNEL_ID: z.string().optional(),
-    GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1).optional(),
-  })
-  .transform((env) =>
-    Object.assign(env, {
-      GOOGLE_APPLICATION_CREDENTIALS: JSON.parse(
-        Buffer.from(
-          env.GOOGLE_APPLICATION_CREDENTIALS_BASE64,
-          "base64",
-        ).toString("utf-8"),
-      ),
-    }),
-  );
+export const Env = z.object({
+  SLACK_TOKEN: z.string().min(1).optional(),
+  SLACK_CHANNEL_ID: z.string().min(1).optional(),
+  SLACK_TESTING_CHANNEL_ID: z.string().optional(),
+  GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1).optional(),
+});
 
 export type Env = z.infer<typeof Env>;
 

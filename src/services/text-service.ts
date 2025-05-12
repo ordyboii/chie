@@ -1,5 +1,5 @@
-export const textService = {
-  similarText(str1: string, str2: string) {
+export class TextService {
+  static similarText(str1: string, str2: string) {
     const distance = this.levenshteinDistance(str1, str2);
     const maxLength = Math.max(str1.length, str2.length);
 
@@ -7,8 +7,9 @@ export const textService = {
 
     // Round to nearest whole number
     return Math.round((1 - distance / maxLength) * 100);
-  },
-  levenshteinDistance(str1: string, str2: string): number {
+  }
+
+  static levenshteinDistance(str1: string, str2: string): number {
     const m = str1.length;
     const n = str2.length;
     const dp: number[][] = [];
@@ -40,5 +41,5 @@ export const textService = {
     }
 
     return dp[m][n];
-  },
-};
+  }
+}

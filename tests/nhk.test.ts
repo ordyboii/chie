@@ -1,29 +1,11 @@
 import { describe, it } from "node:test";
-import { ok, doesNotThrow } from "node:assert";
-import * as NHK from "@/services/nhk-service";
-import { env } from "@/config/env";
+import { doesNotThrow } from "node:assert";
 import { z } from "zod";
+import { NHKService } from "@/services/nhk-service";
 
 describe("test NHK service", () => {
   it("should get a phrase from NHK", async () => {
-    const phrase = await NHK.getNHKPhrase();
+    const phrase = await NHKService.getNHKPhrase();
     doesNotThrow(() => z.string().parse(phrase));
-  });
-
-  it("should get a phrase and send it", async () => {
-    const message = await NHK.sendPhraseToBot(env.SLACK_TESTING_CHANNEL_ID);
-    ok(message.ok);
-  });
-
-  it("should get a translation and compare them", async () => {
-    const phrase = await NHK.getNHKPhrase();
-
-    const message = await NHK.translateAndSendToBot({
-      channelId: env.SLACK_TESTING_CHANNEL_ID,
-      phrase,
-      input: "hello world",
-    });
-
-    ok(message.ok);
   });
 });

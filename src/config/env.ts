@@ -1,24 +1,34 @@
 import { z } from "zod";
-import { PROD } from "@/config/constants";
+import { constants } from "@/config/constants";
 
-if (!PROD) {
+if (!constants.PROD) {
   process.loadEnvFile("./.env");
 }
 
-// Temporary
-export const Env = z.object({
-  SLACK_TOKEN: z.string().min(1).optional(),
-  SLACK_CHANNEL_ID: z.string().min(1).optional(),
-  SLACK_TESTING_CHANNEL_ID: z.string().optional(),
-  GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1).optional(),
-});
+export const envSchema = z
+  .object({
+    GOOGLE_CLIENT_ID: z.string().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().min(1),
+    GOOGLE_APPLICATION_CREDENTIALS_BASE64: z.string().min(1),
+  })
+  .transform((data) => {
+    return Object.assign(data, {
+      GOOGLE_APPLICATION_CREDENTIALS: JSON.parse(
+        Buffer.from(
+          data.GOOGLE_APPLICATION_CREDENTIALS_BASE64,
+          "base64",
+        ).toString("utf-8"),
+      ),
+    });
+  });
 
-export type Env = z.infer<typeof Env>;
+export type EnvSchema = z.infer<typeof envSchema>;
 
-const { data, error } = Env.safeParse(process.env);
+const { data, error } = envSchema.safeParse(process.env);
 
 if (error) {
-  throw new Error(JSON.stringify(error.flatten().fieldErrors, null, 2));
+  const errorFormat = JSON.stringify(error.flatten().fieldErrors, null, 2);
+  throw new Error(`Error getting environment variables: ${errorFormat}`);
 }
 
 export const env = data;

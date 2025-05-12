@@ -1,4 +1,6 @@
 import { env } from "@/config/env";
-import { WebClient } from "@slack/web-api";
+import { v2 } from "@google-cloud/translate";
 
-export const slack = new WebClient(env.SLACK_TOKEN);
+export const googleTranslate = new v2.Translate({
+  credentials: env.GOOGLE_APPLICATION_CREDENTIALS,
+});

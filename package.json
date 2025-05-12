@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "start": "tsx src",
-    "dev": "tsx watch src",
+    "start": "node --import tsx src/app",
+    "dev": "node --watch --import tsx src/app",
     "format": "prettier . --write",
     "lint": "eslint . --ext .ts",
-    "test": "node --import tsx --test ./tests/**/*.ts",
+    "test": "node --test --import tsx ./tests/**/*.ts",
     "prepare": "husky"
   },
   "dependencies": {

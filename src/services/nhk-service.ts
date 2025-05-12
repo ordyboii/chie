@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import { z } from "zod";
-import { NHK_TOP_NEWS_URL } from "@/constants";
+import { NHK_TOP_NEWS_URL } from "@/config/constants";
 import { createChatBot, createTranslateClient, similarText } from "@/utils";
 
 const bot = createChatBot();

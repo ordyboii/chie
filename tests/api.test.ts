@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { ok, doesNotThrow } from "node:assert";
 import { createChatBot, createTranslateClient, similarText } from "@/utils";
-import env from "@/env";
+import env from "@/config/env";
 import { z } from "zod";
 
 const bot = createChatBot();

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PROD } from "@/constants";
+import { PROD } from "@/config/constants";
 
 if (!PROD) {
   process.loadEnvFile("./.env");
@@ -21,4 +21,4 @@ if (error) {
   throw new Error(JSON.stringify(error.flatten().fieldErrors, null, 2));
 }
 
-export default data;
+export const env = data;

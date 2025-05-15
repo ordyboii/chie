@@ -3,6 +3,7 @@ import fastifyCors from "@fastify/cors";
 import fastifyRateLimit from "@fastify/rate-limit";
 import fastifySwagger from "@fastify/swagger";
 import fastifyOauth2 from "@fastify/oauth2";
+import fastifyJwt from "@fastify/jwt";
 import fastifyApiReference from "@scalar/fastify-api-reference";
 import fastifyZod from "fastify-type-provider-zod";
 import { env } from "@/config/env";
@@ -28,6 +29,7 @@ export default fp(async (fastify) => {
 
   await fastify.register(fastifyOauth2, {
     name: "googleOAuth2",
+    scope: ["profile", "email"],
     credentials: {
       client: {
         id: env.GOOGLE_CLIENT_ID,
@@ -35,8 +37,18 @@ export default fp(async (fastify) => {
       },
       auth: fastifyOauth2.GOOGLE_CONFIGURATION,
     },
-    startRedirectPath: "/auth/google", // register a fastify url to start the redirect flow to the service provider's OAuth2 login
-    callbackUri: (req) =>
-      `${req.protocol}://${req.hostname}/auth/google/callback`, // service provider redirects here after user login
+    callbackUri: `http://localhost:3000/v1/auth/google/callback`,
+  });
+
+  await fastify.register(fastifyJwt, {
+    secret: env.JWT_SECRET,
+  });
+
+  fastify.decorate("authenticate", async function (request, reply) {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      reply.send(err);
+    }
   });
 });

@@ -3,6 +3,7 @@ import fastify from "fastify";
 import fastifyConfig from "@/config/fastify";
 import fastifyZod from "fastify-type-provider-zod";
 import nhkRoutes from "@/routes/nhk-routes";
+import authRoutes from "@/routes/auth-routes";
 
 const app = fastify({ logger: true });
 
@@ -11,7 +12,10 @@ app.setValidatorCompiler(fastifyZod.validatorCompiler);
 
 await app.register(fastifyConfig);
 await app.register(nhkRoutes, {
-  prefix: "/nhk",
+  prefix: "/v1/nhk",
+});
+await app.register(authRoutes, {
+  prefix: "/v1/auth",
 });
 
 await app.ready();

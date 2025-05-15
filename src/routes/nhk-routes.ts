@@ -7,15 +7,17 @@ export default fp((fastify) => {
   const app = fastify.withTypeProvider<ZodTypeProvider>();
 
   app.route({
-    url: "/phrase",
+    url: "/v1/nhk/phrase",
     method: "GET",
+    onRequest: [app.authenticate],
     schema: {
       response: {
         200: z.string(),
       },
     },
-    handler() {
-      return NHKService.getNHKPhrase();
+    async handler() {
+      const phrase = await NHKService.getNHKPhrase();
+      return phrase;
     },
   });
 });

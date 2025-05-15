@@ -33,7 +33,7 @@ export class NHKService {
       throw new Error(`Failed to parse JSON: ${error}`);
     });
 
-    const news = NHKSchema.array()
+    const news = await NHKSchema.array()
       .parseAsync(json)
       .catch((error) => {
         throw new Error(`Failed to validate NHK news: ${error}`);

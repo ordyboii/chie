@@ -5,6 +5,7 @@ import fastifySwagger from "@fastify/swagger";
 import fastifyOauth2 from "@fastify/oauth2";
 import fastifyApiReference from "@scalar/fastify-api-reference";
 import fastifyZod from "fastify-type-provider-zod";
+import { env } from "@/config/env";
 
 export default fp(async (fastify) => {
   await fastify.register(fastifyCors);
@@ -29,8 +30,8 @@ export default fp(async (fastify) => {
     name: "googleOAuth2",
     credentials: {
       client: {
-        id: "<CLIENT_ID>",
-        secret: "<CLIENT_SECRET>",
+        id: env.GOOGLE_CLIENT_ID,
+        secret: env.GOOGLE_CLIENT_SECRET,
       },
       auth: fastifyOauth2.GOOGLE_CONFIGURATION,
     },

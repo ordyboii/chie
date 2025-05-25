@@ -5,7 +5,7 @@ import fastifyZod from "fastify-type-provider-zod";
 import nhkRoutes from "@/routes/nhk-routes";
 import authRoutes from "@/routes/auth-routes";
 
-const app = fastify({ logger: true });
+const app = new Hono();
 
 app.setSerializerCompiler(fastifyZod.serializerCompiler);
 app.setValidatorCompiler(fastifyZod.validatorCompiler);
